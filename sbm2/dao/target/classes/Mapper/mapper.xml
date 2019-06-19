@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.controller.dao.IDao">
+<resultMap id="BaseResultMap" type="dao.controller.entity.Study" >
+    <result column="id" property="id" javaType="int"></result>
+    <result column="studyname" property="studyname" jdbcType="VARCHAR" ></result>
+    <result column="photo" property="photo" jdbcType="VARCHAR" ></result>
+    <result column="type" property="type" jdbcType="VARCHAR"></result>
+</resultMap>
+
+<select id="getModelByStudy" resultMap="BaseResultMap">
+        select id,studyname,photo,type from ziliao where username = #{username} and type = #{type}
+    </select>
+
+    <select id="getModelType" resultType="String">
+        select distinct type from type where username = #{userName}
+    </select>
+
+    <select id="getModelAllByStudy" resultMap="BaseResultMap">
+        select id,studyname,photo,type from ziliao
+        where username = #{username} order by id
+    </select>
+    <select id="getModelById" resultType="int">
+        select max(id)+1 as ismax from ziliao
+    </select>
+<select id="getModelByStudyTxt" resultType="dao.controller.entity.Study">
+        select *
+        from ziliao where studyname = #{studyname} and username = #{username} and type = #{type}
+    </select>
+
+    <select id="getModelByStudyName" resultType="int">
+        select count(*) from ziliao
+         where id = #{id}
+    </select>
+
+<insert id="addModelByStudy" parameterType="dao.controller.entity.Study" >
+        insert into ziliao(id, studyname, studytxt, username, type, photo)
+          values (#{id}, #{studyname}, #{studytxt}, #{username},#{type},#{photo})
+    </insert>
+
+    <insert id="addType" parameterType="String" >
+        insert into type(username,type)
+          values (#{username},#{type})
+    </insert>
+
+    <delete id="deleteModelByStudyname" parameterType="int">
+        delete from ziliao where id = #{id}
+    </delete>
+
+    <update id="addPhoto">
+        update ziliao set photo = #{imagePath} where id = #{id}
+    </update>
+
+    <select id="getModelImagePath" resultType="String">
+        select photo from ziliao where id = #{id}
+    </select>
+
+</mapper>
