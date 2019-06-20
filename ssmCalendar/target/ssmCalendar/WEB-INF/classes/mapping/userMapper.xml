@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.dao.Dao">
+    <resultMap id="BaseResultMap" type="com.ssm.model.Event" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="startdate" property="startdate" jdbcType="VARCHAR" />
+        <result column="enddate" property="enddate" jdbcType="VARCHAR" />
+        <result column="event" property="event" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id,startdate,enddate,event
+    </sql>
+    <select id="getModelByEvent" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from event
+    </select>
+    <select id="getModelByEventCount" resultType="int">
+        SELECT COUNT(*) FROM event WHERE event= #{event}
+    </select>
+    <select id="getModelByEventId" resultType="int">
+        select max(id)
+        from event
+    </select>
+    <insert id="addModelByEevent" parameterType="com.ssm.model.Event" >
+        insert into event(id,startdate,enddate,event)
+          values (#{id},#{startdate},#{enddate},#{event})
+    </insert>
+    <delete id="deleteModelByEvent">
+        delete from event where event = #{event}
+    </delete>
+</mapper>
