@@ -86,10 +86,10 @@ public class MainController {
        try {
             List<String> types = service.getModelType(UserController.UserName);
             List<Study> studys = service.getModelByStudy(UserController.UserName,type);
-            List<Study> studies1 = Paging.page(Integer.parseInt(index),studys);
+            List<Study> studies = Paging.page(Integer.parseInt(index),studys);
             model.addAttribute("type",type);
             model.addAttribute("types",types);
-            model.addAttribute("studys",studies1);
+            model.addAttribute("studys",studies);
             model.addAttribute("view","view");
             model.addAttribute("index0",result(index,studys.size())[0]);
             model.addAttribute("index",result(index,studys.size())[1]);

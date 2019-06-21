@@ -12,9 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import javax.annotation.Resource;
@@ -24,8 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 @Service
 public class ServiceImpl implements IService {
 
@@ -45,22 +40,27 @@ public class ServiceImpl implements IService {
         int count;
         // 缓存存在
         ListOperations<String,Study> operations = redisTemplate.opsForList();
-        count = operations.range(key,0,100).size();
-
+        count = operations.range(key,0,-1).size();
         if(count > 0){
+            System.out.println(count);
             studys = new LinkedList<>();
-            for(int i = 0;i < count;i++){
-                studys.add(operations.index(key,i));
-                LOGGER.info(key+": 从缓存中获取了知识 >> "+studys.get(i).toString());
+            for (int i = 0; i < count; i++) {
+                if (operations.index(key, i) == null) {
+                    break;
+                }
+                studys.add(operations.index(key, i));
+                LOGGER.info(key + ": 从缓存中获取了知识 >> " + studys.get(i).toString());
             }
             return studys;
-
         }
         else {
-            studys = dao.getModelByStudy(userName,type);
-            operations.rightPushAll(key, studys);
-            LOGGER.info(key+":"+key+" 插入缓存 ");
-            return  studys;
+            //用户同时访问某个列表没有缓存时，只允许一个用户访问数据，其他用户读取已更改的缓存内容
+            synchronized (this) {
+                studys = dao.getModelByStudy(userName,type);
+                operations.rightPushAll(key, studys);
+                LOGGER.info(key+":"+key+" 插入缓存 ");
+                return  studys;
+            }
         }
     }
 

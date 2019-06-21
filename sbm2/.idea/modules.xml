@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/dao/controller.iml" filepath="$PROJECT_DIR$/dao/controller.iml" />
+      <module fileurl="file://$PROJECT_DIR$/controller/demo (1) (controller).iml" filepath="$PROJECT_DIR$/controller/demo (1) (controller).iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/sbm2.iml" filepath="$PROJECT_DIR$/.idea/sbm2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-eureka/spring-cloud-eureka.iml" filepath="$PROJECT_DIR$/spring-cloud-eureka/spring-cloud-eureka.iml" />
+    </modules>
+  </component>
+</project>
