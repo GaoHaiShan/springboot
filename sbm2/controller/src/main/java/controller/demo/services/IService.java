@@ -7,9 +7,9 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import java.util.List;
 
 public interface IService {
-    List<Study> getModelByStudy(String userName, String tableName);
+    List<Study> getModelByStudy(String userName, String tableName,int[] index);
 
-    Study getModelByStudyTxt(String studyname, String tablename, String username);
+    Study getModelByStudyTxt(String studyname, String type, String username);
 
     Boolean addModelByStudy(Study stud);
 
@@ -19,13 +19,15 @@ public interface IService {
 
     List<String> getModelType(String userName);
 
-    List<Study> getModelAllByStudy(String userName);
+    List<Study> getModelAllByStudy(String userName,int[] index);
 
     int getModelById();
 
     boolean addType(String username, String type);
 
-    boolean addPhoto(CommonsMultipartFile image, int id);
+    boolean addPhoto(CommonsMultipartFile image, Study study);
 
-    boolean deleteModelImage(int id);
+    boolean deleteModelImage(Study study);
+
+    Study getModelByStudy1(int id);
 }

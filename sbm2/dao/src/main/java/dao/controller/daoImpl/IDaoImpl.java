@@ -70,4 +70,9 @@ public class IDaoImpl {
     public String getModelImagePath(@RequestParam("id") int id){
         return dao.getModelImagePath(id);
     }
+
+    @RequestMapping("/getModelByStudy1")
+    public Study getModelByStudy1(@RequestParam("id") int id){
+        return dao.getModelByStudy1(id);
+    }
 }

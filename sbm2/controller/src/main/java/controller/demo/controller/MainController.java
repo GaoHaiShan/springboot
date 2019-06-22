@@ -8,10 +8,8 @@ package controller.demo.controller;
 */
 
 
-import controller.demo.entity.Paging;
 import controller.demo.entity.Study;
 import controller.demo.services.IService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,15 +82,16 @@ public class MainController {
                             @RequestParam(value = "type") String type,
                              Model model) {
        try {
+           int[] i = new int[2];
+           i[0] = Integer.parseInt(index);
             List<String> types = service.getModelType(UserController.UserName);
-            List<Study> studys = service.getModelByStudy(UserController.UserName,type);
-            List<Study> studies = Paging.page(Integer.parseInt(index),studys);
+            List<Study> studys = service.getModelByStudy(UserController.UserName,type,i);
             model.addAttribute("type",type);
             model.addAttribute("types",types);
-            model.addAttribute("studys",studies);
+            model.addAttribute("studys",studys);
             model.addAttribute("view","view");
-            model.addAttribute("index0",result(index,studys.size())[0]);
-            model.addAttribute("index",result(index,studys.size())[1]);
+            model.addAttribute("index0",result(index,i[1])[0]);
+            model.addAttribute("index",result(index,i[1])[1]);
       }catch (Exception e){System.out.println("出错了");}
         finally {
             return "main";
@@ -102,14 +101,15 @@ public class MainController {
     @RequestMapping("/startView")
     public String selectView1(@RequestParam(value = "index",required = true,defaultValue = "0")String index, Model model) {
         try {
+            int [] i = new int[2];
+            i[0] = Integer.parseInt(index);
             List<String> types = service.getModelType(UserController.UserName);
-            List<Study> studies = service.getModelAllByStudy(UserController.UserName);
-            List<Study> studies1 = Paging.page(Integer.parseInt(index),studies);
+            List<Study> studies = service.getModelAllByStudy(UserController.UserName,i);
             model.addAttribute("types",types);
-            model.addAttribute("studys",studies1);
+            model.addAttribute("studys",studies);
             model.addAttribute("view","startView");
-            model.addAttribute("index0",result(index,studies.size())[0]);
-            model.addAttribute("index",result(index,studies.size())[1]);
+            model.addAttribute("index0",result(index,i[1])[0]);
+            model.addAttribute("index",result(index,i[1])[1]);
             model.addAttribute("type","all");
         }catch (Exception e){System.out.println("出错了");}
         finally {
@@ -132,8 +132,9 @@ public class MainController {
     @RequestMapping(value = "/addImage",method = RequestMethod.POST)
     public String addImage(@RequestParam("image") CommonsMultipartFile image, @RequestParam("id")String id) throws IOException {
         try {
-            int id1 = Integer.parseInt(id);
-            service.addPhoto(image,id1);
+           Study study = service.getModelByStudy1(Integer.parseInt(id));
+           study.setUsername(UserController.UserName);
+            service.addPhoto(image,study);
         }
         catch (Exception e){
             System.out.println("eorrs");
@@ -144,7 +145,9 @@ public class MainController {
     @RequestMapping("/deleteImage")
     public String deleteImage(@RequestParam("id")int id){
         try {
-            service.deleteModelImage(id);
+            Study study = service.getModelByStudy1(id);
+            study.setUsername(UserController.UserName);
+            service.deleteModelImage(study);
        }catch (Exception e){
             System.out.println("删除出错");
         }

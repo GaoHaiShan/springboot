@@ -55,4 +55,7 @@
         select photo from ziliao where id = #{id}
     </select>
 
+        <select id="getModelByStudy1" resultType="dao.controller.entity.Study">
+        select id,studyname,username,photo,type from ziliao where id = #{id}
+    </select>
 </mapper>

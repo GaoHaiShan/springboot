@@ -30,4 +30,6 @@ public interface IDao {
     boolean addPhoto(@Param("imagePath") String imagePath, @Param("id") int id);
 
     String getModelImagePath(int id);
+
+    Study getModelByStudy1(int id);
 }

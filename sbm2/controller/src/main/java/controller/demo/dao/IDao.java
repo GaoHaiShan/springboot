@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+/**
+ * name为获取的服务名
+ */
 @FeignClient(name = "spring-cloud-dao")
 public interface IDao {
     @RequestMapping("/IDao/addModelByStudy")
@@ -45,4 +48,6 @@ public interface IDao {
     @RequestMapping("/IDao/getModelImagePath")
     String getModelImagePath(@RequestParam(value = "id") int id);
 
+    @RequestMapping("/IDao/getModelByStudy1")
+    Study getModelByStudy1(@RequestParam(value = "id") int id);
 }
