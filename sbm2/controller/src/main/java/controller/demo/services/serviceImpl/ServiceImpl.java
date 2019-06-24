@@ -103,11 +103,17 @@ public class ServiceImpl implements IService {
      *删除知识点
      */
     @Override
-    public Boolean deleteModelByStudyname(int id) {
-        String fileName =  dao.getModelImagePath(id);
-        String file = fileName.substring(fileName.lastIndexOf("/")+1);
-        new File("D:/javaText/sbm2/controller/src/main/resources/image/"+file).delete();
-        return dao.deleteModelByStudyname(id);
+    public Boolean deleteModelByStudyname(Study study) {
+        String key = "getModelByStudy"+study.getType()+study.getUsername();
+        String key1 = "getModelAllByStudy" + study.getUsername();
+        String fileName =  dao.getModelImagePath(study.getId());
+        if(fileName!=null&&fileName!="") {
+            String file = fileName.substring(fileName.lastIndexOf("/") + 1);
+            new File("D:/javaText/sbm2/controller/src/main/resources/image/" + file).delete();
+        }
+        deleteModelByStudyName(study.getId(),key);
+        deleteModelByStudyName(study.getId(),key1);
+        return dao.deleteModelByStudyname(study.getId());
     }
 
     /**
@@ -168,7 +174,7 @@ public class ServiceImpl implements IService {
      */
     @Override
     public boolean addPhoto(CommonsMultipartFile image,Study study)  {
-        String imageName= "";
+        String imageName=null;
         String key = "getModelByStudy"+study.getType()+study.getUsername();
         String key1 = "getModelAllByStudy" + study.getUsername();
         try {
@@ -182,12 +188,12 @@ public class ServiceImpl implements IService {
                     substring(image.getOriginalFilename().lastIndexOf(".") + 1);
             imageName = simpleDateFormat.format(new Date())+"."+suffix;
             FileUtils.copyInputStreamToFile(image.getInputStream(),new File(f,imageName));
+            //修改缓存区
+            addPhoto("/" +imageName,study.getId(),key);
+            addPhoto("/" +imageName,study.getId(),key1);
         }catch (IOException e){
             System.out.println("eorrs1");
         }
-        //修改缓存区
-        addPhoto("/" +imageName,study,key);
-        addPhoto("/" +imageName,study,key1);
         return dao.addPhoto("/" +imageName,study.getId());
     }
 
@@ -198,16 +204,18 @@ public class ServiceImpl implements IService {
     public boolean deleteModelImage(Study study) {
         String key = "getModelByStudy"+study.getType()+study.getUsername();
         String key1 = "getModelAllByStudy" + study.getUsername();
-        boolean f;
+        boolean f = false;
         //删除图片
-        String fileName = dao.getModelImagePath(study.getId());
-        String file = fileName.substring(fileName.lastIndexOf("/")+1);
-        dao.addPhoto("",study.getId());
-        File file1 = new File("D:/javaText/sbm2/controller/src/main/resources/image"+file);
-        f=file1.delete();
+       String fileName = dao.getModelImagePath(study.getId());
+       if(fileName!=null&&fileName!="") {
+           String file = fileName.substring(fileName.lastIndexOf("/") + 1);
+           dao.addPhoto("", study.getId());
+           File file1 = new File("D:/javaText/sbm2/controller/src/main/resources/image/" + file);
+           f = file1.delete();
+       }
         //修改缓存区
-        addPhoto("" ,study,key);
-        addPhoto("" ,study,key1);
+        addPhoto("" ,study.getId(),key);
+        addPhoto("" ,study.getId(),key1);
         return f;
     }
 
@@ -222,13 +230,13 @@ public class ServiceImpl implements IService {
     /**
      *修改缓存区图片地址
      */
-    private void addPhoto(String path,Study study,String key){
+    private void addPhoto(String path,int id,String key){
         ListOperations<String,Study> operations = redisTemplate.opsForList();
         Study study1;
         int count;
         for (int i = 0;i < operations.range(key,0,-1).size();i++){
             count = operations.range(key,0,-1).get(i).getId();
-            if(count==study.getId()){
+            if(count==id){
                 study1=operations.range(key,0,-1).get(i);
                 operations.remove(key,0,study1);
                 study1.setPhoto(path);
@@ -239,6 +247,23 @@ public class ServiceImpl implements IService {
         }
     }
 
+    /**
+     *修改缓存区图片地址
+     */
+    private void deleteModelByStudyName(int id,String key){
+        ListOperations<String,Study> operations = redisTemplate.opsForList();
+        Study study1;
+        int count;
+        for (int i = 0;i < operations.range(key,0,-1).size();i++){
+            count = operations.range(key,0,-1).get(i).getId();
+            if(count==id){
+                study1=operations.range(key,0,-1).get(i);
+                operations.remove(key,0,study1);
+                System.out.println("删除"+key+"成功");
+                break;
+            }
+        }
+    }
     /**
      *查询缓存区对应的知识点列表
      */

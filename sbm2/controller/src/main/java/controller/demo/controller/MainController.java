@@ -31,7 +31,9 @@ public class MainController {
     @RequestMapping(value = "/delete")
     public String Delete(@RequestParam("id")int id) {
         try {
-            service.deleteModelByStudyname(id);
+            Study study = service.getModelByStudy1(id);
+            study.setUsername(UserController.UserName);
+            service.deleteModelByStudyname(study);
         }
         catch (Exception e)
         {
@@ -143,12 +145,12 @@ public class MainController {
     }
 
     @RequestMapping("/deleteImage")
-    public String deleteImage(@RequestParam("id")int id){
+    public String deleteImage(@RequestParam("id") int id){
         try {
             Study study = service.getModelByStudy1(id);
             study.setUsername(UserController.UserName);
             service.deleteModelImage(study);
-       }catch (Exception e){
+        }catch (Exception e){
             System.out.println("删除出错");
         }
        finally {

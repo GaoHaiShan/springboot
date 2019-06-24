@@ -15,7 +15,7 @@ public interface IService {
 
     int getModelByStudyName(int id);
 
-    Boolean deleteModelByStudyname(int id);
+    Boolean deleteModelByStudyname(Study study);
 
     List<String> getModelType(String userName);
 
