@@ -13,6 +13,7 @@ public class Study implements Serializable {
     private String username;
     private String type;
     private String photo;
+    private boolean permissions;
 
     public void setPhoto(String photo) {
         this.photo = photo;
@@ -60,6 +61,14 @@ public class Study implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void setPermissions(boolean permissions) {
+        this.permissions = permissions;
+    }
+
+    public boolean isPermissions() {
+        return permissions;
     }
 
     @Override

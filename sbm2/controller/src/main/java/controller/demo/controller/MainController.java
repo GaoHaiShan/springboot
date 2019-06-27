@@ -28,6 +28,8 @@ public class MainController {
     @Resource
     private IService service;
 
+    private volatile int id;
+
     @RequestMapping(value = "/delete")
     public String Delete(@RequestParam("id")int id) {
         try {
@@ -47,13 +49,17 @@ public class MainController {
     @RequestMapping(value = "/tianjia")
     public String AddStudy(Study study) {
         try {
+            if(id!=study.getId()){
+                study.setId(id);
+            }
             study.setUsername(UserController.UserName);
             if (service.addModelByStudy(study)) {
+                id = service.getModelById();
                 return "redirect:/main/startView";
             } else {
                 return "redirect:/main/jilu1";
             }
-        } catch (Exception E) {
+        } catch (Exception e) {
             System.out.println("添加出错了");
             return "redirect:/main/jilu1";
         }
@@ -62,7 +68,8 @@ public class MainController {
     @RequestMapping("/jilu1") //添加新知识点
     public String NewJiLu(Model model) {
         List<String> types = service.getModelType(UserController.UserName);
-        model.addAttribute("id" ,service.getModelById());
+        id = service.getModelById();
+        model.addAttribute("id" ,id);
         model.addAttribute("types",types);
         return "jilu1";
     }

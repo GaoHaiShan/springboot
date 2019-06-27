@@ -88,9 +88,7 @@ public class ServiceImpl implements IService {
         }else{
             return false;
         }
-
     }
-
     /**
      *在添加知识点的时候判断知识点是否存在
      */
