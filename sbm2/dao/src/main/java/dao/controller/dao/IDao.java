@@ -13,7 +13,7 @@ public interface IDao {
 
     Study getModelByStudyTxt(@Param("studyname") String studyname, @Param("type") String type, @Param("username") String username);
 
-    List<Study> getModelByStudy(@Param("username") String username, @Param("type") String type);
+    List<Study> getModelByStudy(@Param("username") String username, @Param("type") String type,@Param("f")boolean f);
 
     int getModelByStudyName(int id);
 
@@ -21,7 +21,7 @@ public interface IDao {
 
     List<String> getModelType(String userName);
 
-    List<Study> getModelAllByStudy(String userName);
+    List<Study> getModelAllByStudy(@Param("userName") String userName,@Param("f") boolean f);
 
     int getModelById();
 

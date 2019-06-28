@@ -22,7 +22,8 @@ public interface IDao {
 
     @RequestMapping("/IDao/getModelByStudy")
     List<Study> getModelByStudy(@RequestParam(value = "username") String username,
-                                @RequestParam(value = "type") String type);
+                                @RequestParam(value = "type") String type,
+                                @RequestParam(value = "f") boolean f);
 
     @RequestMapping("/IDao/getModelByStudyName")
     Integer getModelByStudyName(@RequestParam(value = "id") int id);
@@ -34,7 +35,7 @@ public interface IDao {
     List<String> getModelType(@RequestParam(value = "userName") String userName);
 
     @RequestMapping("/IDao/getModelAllByStudy")
-    List<Study> getModelAllByStudy(@RequestParam(value = "userName") String userName);
+    List<Study> getModelAllByStudy(@RequestParam(value = "userName") String username,@RequestParam(value = "f")boolean f);
 
     @RequestMapping("/IDao/getModelById")
     Integer getModelById();

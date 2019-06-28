@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script type="text/javascript">
+        function validate(){
+            var word1= document.getElementById("password1").value;
+            var word2 = document.getElementById("password2").value;
+            if(word1 != word2){
+                window.alert("两次输入的新密码不一致！");
+                return false;
+            }
+            document.getElementById("from1").onsubmit;}
+    </script>
+</head>
+<body  style="background-image: url('/111111.jpeg');background-size:cover;">
+<div style="width: 100%; height: 150px;"></div>
+
+<div style="width: 30%;border: solid 1px;margin: auto auto">
+    <form action="/user/adduser/" id="from1" onsubmit=" return validate()">
+        <table style="margin: auto;margin-top:20px;">
+            <caption style="text-align: center;height: 50px"> 用户注册页面</caption>
+            <tr >
+                <td style="text-align: right">用户名:</td>
+                <td><input type="text" name="username"/></td>
+            </tr>
+            <tr style="height: 50px;">
+                <td style="text-align: right">密码:</td>
+                <td><input type="password" name="password" id="password1"/></td>
+            </tr>
+            <tr>
+                <td style="text-align: right">确认密码:</td>
+                <td><input type="password" id="password2"/></td>
+            </tr>
+            <tr style="height: 50px;">
+                <td style="margin: auto"><input type="submit" value="注册"/></td>
+                <td style="margin-right: 10px"> <a href="/user/user">返回</a> </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

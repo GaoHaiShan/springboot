@@ -5,13 +5,14 @@ import org.springframework.stereotype.Component;
 import java.io.Serializable;
 
 @Component
-public class Study  implements Serializable {
+public class Study implements Serializable {
     private int id;
     private String studyname;
     private String studytxt;
     private String username;
     private String type;
     private String photo;
+    private int permissions;
 
     public void setPhoto(String photo) {
         this.photo = photo;
@@ -59,5 +60,18 @@ public class Study  implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void setPermissions(int permissions) {
+        this.permissions = permissions;
+    }
+
+    public int getPermissions() {
+        return permissions;
+    }
+
+    @Override
+    public String toString() {
+        return "["+getId()+","+getStudyname()+","+getType()+","+getPhoto()+"]";
     }
 }

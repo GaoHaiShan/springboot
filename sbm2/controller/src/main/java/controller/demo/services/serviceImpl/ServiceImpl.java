@@ -34,9 +34,12 @@ public class ServiceImpl implements IService {
      */
 
     @Override
-    public List<Study> getModelByStudy(String userName, String type, int[] index) {
+    public List<Study> getModelByStudy(String userName, String type, int[] index,boolean f) {
         List<Study> studys;
         String key = "getModelByStudy"+type+userName;
+        if (f){
+            key += "public";
+        }
         // 缓存存在
         ListOperations<String,Study> operations = redisTemplate.opsForList();
         index[1] = operations.range(key,0,-1).size();
@@ -46,7 +49,7 @@ public class ServiceImpl implements IService {
         else {
             //用户同时访问某个列表没有缓存时，只允许一个用户访问数据，其他用户读取已更改的缓存内容
             synchronized (this) {
-                studys = dao.getModelByStudy(userName,type);
+                studys = dao.getModelByStudy(userName,type,f);
                 operations.rightPushAll(key, studys);
                 LOGGER.info(key+":"+key+" 插入缓存 ");
                 if(studys.size()>10) {
@@ -73,17 +76,33 @@ public class ServiceImpl implements IService {
      */
     @Override
     public Boolean addModelByStudy(Study study) {
+        boolean f1 = true;
         String key = "getModelByStudy"+study.getType()+study.getUsername();
         String key1 = "getModelAllByStudy" + study.getUsername();
         ListOperations<String,Study> operations = redisTemplate.opsForList();
         if (dao.getModelByStudyName(study.getId()) > 0) {
+            f1 = false;
            dao.deleteModelByStudyname(study.getId());
         }
         if (dao.addModelByStudy(study)) {
-            operations.rightPush(key, study);
-            System.out.println(key+"添加："+study.toString()+"成功");
-            operations.rightPush(key1, study);
-            System.out.println(key1+"添加："+study.toString()+"成功");
+             if(f1){
+                 operations.leftPush(key, study);
+                 System.out.println(key+"添加："+study.toString()+"成功");
+                 operations.leftPush(key1, study);
+                 System.out.println(key1+"添加："+study.toString()+"成功");
+             }
+            if(study.isPermissions()==1){
+                key += "public";
+                key1 += "public";
+                if(operations.size(key)>0){
+                    operations.leftPush(key, study);
+                    System.out.println(key+"添加："+study.toString()+"成功");
+                }
+                if(operations.size(key1)>0) {
+                    operations.leftPush(key1, study);
+                    System.out.println(key1 + "添加：" + study.toString() + "成功");
+                }
+            }
             return true;
         }else{
             return false;
@@ -105,12 +124,23 @@ public class ServiceImpl implements IService {
         String key = "getModelByStudy"+study.getType()+study.getUsername();
         String key1 = "getModelAllByStudy" + study.getUsername();
         String fileName =  dao.getModelImagePath(study.getId());
+        ListOperations<String,Study> operations = redisTemplate.opsForList();
         if(fileName!=null&&fileName!="") {
             String file = fileName.substring(fileName.lastIndexOf("/") + 1);
             new File("D:/javaText/sbm2/controller/src/main/resources/image/" + file).delete();
         }
         deleteModelByStudyName(study.getId(),key);
         deleteModelByStudyName(study.getId(),key1);
+        if (study.isPermissions()==1){
+            key += "public";
+            key1 += "public";
+            if(operations.size(key)>0){
+                deleteModelByStudyName(study.getId(),key);
+            }
+            if(operations.size(key1)>0){
+                deleteModelByStudyName(study.getId(),key1);
+            }
+        }
         return dao.deleteModelByStudyname(study.getId());
     }
 
@@ -126,8 +156,11 @@ public class ServiceImpl implements IService {
      *获取所有知识点，并返回十个，将全部知识点插入缓存
      */
     @Override
-    public List<Study> getModelAllByStudy(String userName,int[] index) {
+    public List<Study> getModelAllByStudy(String userName,int[] index,boolean f) {
         String key = "getModelAllByStudy"+userName;
+        if (f){
+            key += "public";
+        }
         List<Study> studys;
         ListOperations<String,Study> operations = redisTemplate.opsForList();
         index[1] = operations.range(key,0,-1).size();
@@ -138,7 +171,7 @@ public class ServiceImpl implements IService {
         else {
             //用户同时访问某个列表没有缓存时，只允许一个用户访问数据，其他用户读取已更改的缓存内容
             synchronized (this) {
-                studys = dao.getModelAllByStudy(userName);
+                studys = dao.getModelAllByStudy(userName,f);
                 operations.rightPushAll(key, studys);
                 LOGGER.info(key+":"+key+" 插入缓存 ");
                 if(studys.size()>10) {
@@ -175,6 +208,7 @@ public class ServiceImpl implements IService {
         String imageName=null;
         String key = "getModelByStudy"+study.getType()+study.getUsername();
         String key1 = "getModelAllByStudy" + study.getUsername();
+        ListOperations<String,Study> operations = redisTemplate.opsForList();
         try {
             //添加图片
             if(image.getSize()==0) {
@@ -189,6 +223,16 @@ public class ServiceImpl implements IService {
             //修改缓存区
             addPhoto("/" +imageName,study.getId(),key);
             addPhoto("/" +imageName,study.getId(),key1);
+            if(study.isPermissions()==1){
+                key += "public";
+                key1 += "public";
+                if (operations.size(key)>0){
+                    addPhoto("/" +imageName,study.getId(),key);
+                }
+                if (operations.size(key1)>0){
+                    addPhoto("/" +imageName,study.getId(),key1);
+                }
+            }
         }catch (IOException e){
             System.out.println("eorrs1");
         }
@@ -203,6 +247,7 @@ public class ServiceImpl implements IService {
         String key = "getModelByStudy"+study.getType()+study.getUsername();
         String key1 = "getModelAllByStudy" + study.getUsername();
         boolean f = false;
+        ListOperations<String,Study> operations = redisTemplate.opsForList();
         //删除图片
        String fileName = dao.getModelImagePath(study.getId());
        if(fileName!=null&&fileName!="") {
@@ -214,6 +259,16 @@ public class ServiceImpl implements IService {
         //修改缓存区
         addPhoto("" ,study.getId(),key);
         addPhoto("" ,study.getId(),key1);
+        if (study.isPermissions()==1){
+            key += "public";
+            key1 += "public";
+            if (operations.size(key)>0){
+                addPhoto("",study.getId(),key);
+            }
+            if (operations.size(key1)>0){
+                addPhoto("",study.getId(),key1);
+            }
+        }
         return f;
     }
 

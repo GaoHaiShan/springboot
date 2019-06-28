@@ -7,7 +7,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import java.util.List;
 
 public interface IService {
-    List<Study> getModelByStudy(String userName, String tableName,int[] index);
+    List<Study> getModelByStudy(String userName, String tableName,int[] index,boolean f);
 
     Study getModelByStudyTxt(String studyname, String type, String username);
 
@@ -19,7 +19,7 @@ public interface IService {
 
     List<String> getModelType(String userName);
 
-    List<Study> getModelAllByStudy(String userName,int[] index);
+    List<Study> getModelAllByStudy(String userName,int[] index,boolean f);
 
     int getModelById();
 

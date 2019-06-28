@@ -13,7 +13,7 @@ public class Study implements Serializable {
     private String username;
     private String type;
     private String photo;
-    private boolean permissions;
+    private int permissions;
 
     public void setPhoto(String photo) {
         this.photo = photo;
@@ -63,16 +63,16 @@ public class Study implements Serializable {
         this.type = type;
     }
 
-    public void setPermissions(boolean permissions) {
+    public void setPermissions(int permissions) {
         this.permissions = permissions;
     }
 
-    public boolean isPermissions() {
+    public int isPermissions() {
         return permissions;
     }
 
     @Override
     public String toString() {
-        return "["+getId()+","+getStudyname()+","+getType()+","+getPhoto()+"]";
+        return "["+getId()+","+getStudyname()+","+getType()+","+getPhoto()+","+isPermissions()+"]";
     }
 }

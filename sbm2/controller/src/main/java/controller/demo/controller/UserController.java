@@ -9,19 +9,19 @@ package controller.demo.controller;
 
 import controller.demo.entity.User;
 import controller.demo.services.IUserService;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
+import java.net.URLEncoder;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
     @Resource
     private IUserService userService;
-
-    public static String UserName;
 
     @RequestMapping("/registered")
     public String Zhuce(){
@@ -36,9 +36,8 @@ public class UserController {
     @RequestMapping("/denglu")//登陆请求地址
     public String Denglu(User user, Model model) {
         try {
-            UserName = user.getUsername();
             if (userService.getModelByUser(user)>0) {
-                return "redirect:/main/startView";
+                return "redirect:/main/startView/?myUsername="+ URLEncoder.encode(user.getUsername(),"UTF-8");
             }else {
                 model.addAttribute("error","用户名或密码输入有误");
                 return "User";

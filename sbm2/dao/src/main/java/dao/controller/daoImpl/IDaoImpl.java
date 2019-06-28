@@ -3,7 +3,6 @@ package dao.controller.daoImpl;
 import dao.controller.dao.IDao;
 import dao.controller.entity.Study;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -27,8 +26,9 @@ public class IDaoImpl {
     }
 
     @RequestMapping("/getModelByStudy")
-    public List<Study> getModelByStudy(@RequestParam("username") String username, @RequestParam("type") String type){
-        return dao.getModelByStudy(username,type);
+    public List<Study> getModelByStudy(@RequestParam("username") String username, @RequestParam("type") String type,
+                                       @RequestParam("f")boolean f){
+        return dao.getModelByStudy(username,type,f);
     }
 
     @RequestMapping("/getModelByStudyName")
@@ -47,8 +47,8 @@ public class IDaoImpl {
     }
 
     @RequestMapping("/getModelAllByStudy")
-    public List<Study> getModelAllByStudy(@RequestParam String userName){
-        return dao.getModelAllByStudy(userName);
+    public List<Study> getModelAllByStudy(@RequestParam("userName") String userName,@RequestParam("f")boolean f){
+        return dao.getModelAllByStudy(userName,f);
     }
 
     @RequestMapping("/getModelById")
