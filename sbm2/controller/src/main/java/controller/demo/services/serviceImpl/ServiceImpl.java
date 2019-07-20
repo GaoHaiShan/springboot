@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import javax.annotation.Resource;
 import java.io.File;
@@ -20,6 +21,9 @@ import java.util.LinkedList;
 import java.util.List;
 @Service
 public class ServiceImpl implements IService {
+
+    @Autowired
+    RestTemplate restTemplate;
 
     @Resource
     private IDao dao;
@@ -50,14 +54,15 @@ public class ServiceImpl implements IService {
             //用户同时访问某个列表没有缓存时，只允许一个用户访问数据，其他用户读取已更改的缓存内容
             synchronized (this) {
                 studys = dao.getModelByStudy(userName,type,f);
-                operations.rightPushAll(key, studys);
-                LOGGER.info(key+":"+key+" 插入缓存 ");
-                if(studys.size()>10) {
-                    return studys.subList(0, 10);
+                if(studys.size()>0) {
+                    operations.rightPushAll(key, studys);
+                    LOGGER.info(key + ":" + key + " 插入缓存 ");
                 }
-                else {
-                    return studys;
-                }
+                    if (studys.size() > 10) {
+                        return studys.subList(0, 10);
+                    } else {
+                        return studys;
+                    }
             }
         }
     }

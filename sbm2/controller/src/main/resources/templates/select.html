@@ -13,9 +13,10 @@
                 <td><input type="text" name="username"/>
                     <input style="display: none" type="text" name="myUsername" th:value="${myUsername}"/></td>
             </tr>
+            <tr><td colspan="2" th:text="${c}"></td></tr>
             <tr style="height: 50px;">
                 <td style="margin: auto"><input type="submit" value="查找"/></td>
-                <td style="margin-right: 10px"> <a href="/main/startView">返回</a> </td>
+                <td style="margin-right: 10px"> <a th:href="'/main/startView/?myUsername='+${myUsername}">返回</a> </td>
             </tr>
         </table>
     </form>

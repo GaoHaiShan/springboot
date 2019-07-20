@@ -90,7 +90,7 @@
         <br/>
         <input style="border: solid 1px; width: 200px;height: 30px;margin-top: 30px" type="text"  name="type" /><br/>
         <br/>
-        <input style="display: none" name="myUsername" th:text="${myUsername}" />
+        <input style="display: none" type="text" name="myUsername" th:value="${myUsername}" />
         <input style="width:80px;margin: auto;font-size:x-large;margin-top: 10px;" type="submit" onmousemove="this.className='input_move'" onmouseout="this.className=''" value="确认" />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <input style=" width:80px;margin: auto;font-size:x-large; margin-top: 10px;" type="button" onmousemove="this.className='input_move'" onmouseout="this.className=''" onclick="$.fancybox.close()" value="取消" />

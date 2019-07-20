@@ -6,6 +6,7 @@ import dao.controller.mqMessege.entity.Message;
 import dao.controller.mqMessege.send.Sender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -26,7 +27,7 @@ public class IDaoImpl {
     private Message message;
 
     @RequestMapping("/addModelByStudy")
-    public Boolean addModelByStudy(@RequestBody Study study) throws UnknownHostException {
+    public Boolean addModelByStudy(@RequestBody Study study)  {
         try {
             Map<String, Object> map = new HashMap<>(16);
             map.put("study", study);
@@ -119,7 +120,7 @@ public class IDaoImpl {
     }
 
     private static Message getMessage(String modelName, Map<String,Object> param,Message message) throws UnknownHostException {
-        message.setIp(InetAddress.getLocalHost().getHostAddress()+"9001");
+        message.setIp(InetAddress.getLocalHost().getHostAddress()+"8001");
         message.setModelName(modelName);
         message.setParam(param);
         return message;

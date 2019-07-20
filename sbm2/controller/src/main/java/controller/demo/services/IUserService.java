@@ -6,4 +6,5 @@ import controller.demo.entity.User;
 public interface IUserService {
     int getModelByUser(User user);
     boolean addUser(User user);
+    int getUser(String username);
 }

@@ -2,7 +2,6 @@ package dao.controller.daoImpl;
 
 import dao.controller.dao.IUserDao;
 import dao.controller.entity.User;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

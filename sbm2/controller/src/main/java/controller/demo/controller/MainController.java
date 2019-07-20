@@ -13,7 +13,9 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -48,7 +50,6 @@ public class MainController {
      * 存储最大id
      */
     private volatile int id;
-
 
     /**
      *删除知识点
@@ -120,8 +121,10 @@ public class MainController {
                 otherUserName = myUsername;
             }
             if(myUsername.equals(otherUserName)){
+                model.addAttribute("myUsername",myUsername);
                 f = false;
             } else{
+                model.addAttribute("myUsername",myUsername);
                 f = true;
             }
             Study study = service.getModelByStudyTxt(studyname,type1,otherUserName);
@@ -146,7 +149,6 @@ public class MainController {
        try {
            int[] i = new int[2];
            boolean f;
-         System.out.println(myUsername+"："+otherUserName);
            if(otherUserName.equals("")){
                otherUserName = myUsername;
            }
@@ -157,7 +159,7 @@ public class MainController {
            }
            i[0] = Integer.parseInt(index);
             List<String> types = service.getModelType(otherUserName);
-            List<Study> studys = service.getModelByStudy(otherUserName,type,i,f);
+            List<Study> studys = service.   getModelByStudy(otherUserName,type,i,f);
             model.addAttribute("myUsername",myUsername);
             model.addAttribute("type",type);
             model.addAttribute("types",types);
@@ -220,10 +222,10 @@ public class MainController {
     public String addType(@RequestParam("type") String type,@RequestParam("myUsername")String myUsername) throws IOException{
        try {
            service.addType(myUsername,type);
-           return "redirect:/main/startView/?username="+ URLEncoder.encode(myUsername,"UTF-8");
+           return "redirect:/main/startView/?myUsername="+ URLEncoder.encode(myUsername,"UTF-8");
        }catch (Exception e){
            System.out.println("添加type出错了");
-           return "redirect:/main/startView/?username="+ URLEncoder.encode(myUsername,"UTF-8");
+           return "redirect:/main/startView/?myUsername="+ URLEncoder.encode(myUsername,"UTF-8");
        }
     }
 

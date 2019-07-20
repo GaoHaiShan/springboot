@@ -59,7 +59,7 @@
         </div>
         <div style="float: left;">
             <h2 th:if="${f!=true}" style="float: left">是否允许他人访问：</h2>
-            <select name="permission"  style="margin-top: 20px; width: 100px;height: 30px;font-size: large">
+            <select th:if="${f!=true}" name="permission"  style="margin-top: 20px; width: 100px;height: 30px;font-size: large">
                 <option value="1">是</option>
                 <option value="0">否</option>
             </select>
@@ -71,7 +71,8 @@
     <form  id="form2" action="/main/view/">
         <input type="submit" style="width: 80px;height: 80px;" value="返回" /><br/>
         <input type="text" style="display: none;" name="type" th:value="${study.getType()}" readonly="readonly" />
-        <input style="display: none" name="myUsername" th:value="${study.getUsername()}" />
+        <input style="display: none" name="myUsername" th:value="${myUsername}" />
+        <input style="display: none" name="otherUsername" th:value="${study.getUsername()}" />
     </form>
 </div>
 <div style="display:none;">
