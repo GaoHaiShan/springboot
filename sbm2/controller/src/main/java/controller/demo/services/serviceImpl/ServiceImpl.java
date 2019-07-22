@@ -33,6 +33,11 @@ public class ServiceImpl implements IService {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Override
+    public Boolean updateModelByStudy(int id, String studytxt) {
+        return dao.updateModelByStudy(id,studytxt);
+    }
+
     /**
      *   获取某一个类型的知识点，并将知识点插入缓存区
      */
@@ -72,8 +77,8 @@ public class ServiceImpl implements IService {
      */
 
     @Override
-    public Study getModelByStudyTxt(String studyname, String type, String username) {
-        return dao.getModelByStudyTxt(studyname,type,username);
+    public Study getModelByStudyTxt(int id) {
+        return dao.getModelByStudyTxt(id);
     }
 
     /**
@@ -81,22 +86,15 @@ public class ServiceImpl implements IService {
      */
     @Override
     public Boolean addModelByStudy(Study study) {
-        boolean f1 = true;
         String key = "getModelByStudy"+study.getType()+study.getUsername();
         String key1 = "getModelAllByStudy" + study.getUsername();
         ListOperations<String,Study> operations = redisTemplate.opsForList();
-        if (dao.getModelByStudyName(study.getId()) > 0) {
-            f1 = false;
-           dao.deleteModelByStudyname(study.getId());
-        }
         if (dao.addModelByStudy(study)) {
-             if(f1){
                  operations.leftPush(key, study);
                  System.out.println(key+"添加："+study.toString()+"成功");
                  operations.leftPush(key1, study);
                  System.out.println(key1+"添加："+study.toString()+"成功");
-             }
-            if(study.isPermissions()==1){
+            if(study.getPermissions()==1){
                 key += "public";
                 key1 += "public";
                 if(operations.size(key)>0){
@@ -136,7 +134,7 @@ public class ServiceImpl implements IService {
         }
         deleteModelByStudyName(study.getId(),key);
         deleteModelByStudyName(study.getId(),key1);
-        if (study.isPermissions()==1){
+        if (study.getPermissions()==1){
             key += "public";
             key1 += "public";
             if(operations.size(key)>0){
@@ -177,9 +175,9 @@ public class ServiceImpl implements IService {
             //用户同时访问某个列表没有缓存时，只允许一个用户访问数据，其他用户读取已更改的缓存内容
             synchronized (this) {
                 studys = dao.getModelAllByStudy(userName,f);
-                operations.rightPushAll(key, studys);
-                LOGGER.info(key+":"+key+" 插入缓存 ");
                 if(studys.size()>10) {
+                    operations.rightPushAll(key, studys);
+                    LOGGER.info(key+":"+key+" 插入缓存 ");
                     return studys.subList(0, 10);
                 }
                 else {
@@ -228,7 +226,7 @@ public class ServiceImpl implements IService {
             //修改缓存区
             addPhoto("/" +imageName,study.getId(),key);
             addPhoto("/" +imageName,study.getId(),key1);
-            if(study.isPermissions()==1){
+            if(study.getPermissions()==1){
                 key += "public";
                 key1 += "public";
                 if (operations.size(key)>0){
@@ -264,7 +262,7 @@ public class ServiceImpl implements IService {
         //修改缓存区
         addPhoto("" ,study.getId(),key);
         addPhoto("" ,study.getId(),key1);
-        if (study.isPermissions()==1){
+        if (study.getPermissions()==1){
             key += "public";
             key1 += "public";
             if (operations.size(key)>0){

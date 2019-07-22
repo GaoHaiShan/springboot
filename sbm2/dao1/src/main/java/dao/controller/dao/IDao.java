@@ -9,9 +9,11 @@ import java.util.List;
 @Repository
 public interface IDao {
 
+    Boolean updateModelByStudy(@Param("id") int id,@Param("studytxt") String studytxt);
+
     Boolean addModelByStudy(Study study);
 
-    Study getModelByStudyTxt(@Param("studyname") String studyname, @Param("type") String type, @Param("username") String username);
+    Study getModelByStudyTxt(int id);
 
     List<Study> getModelByStudy(@Param("username") String username, @Param("type") String type,@Param("f")boolean f);
 

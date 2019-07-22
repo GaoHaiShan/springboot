@@ -9,6 +9,9 @@
     <result column="username" property="username" jdbcType="VARCHAR"></result>
     <result column="permissions" property="permissions" javaType="int"></result>
 </resultMap>
+    <update id="updateModelByStudy">
+        update ziliao set studytxt = #{studytxt} where id = #{id}
+    </update>
 
 <select id="getModelByStudy" resultMap="BaseResultMap">
         select id,studyname,photo,type,permissions,username from ziliao where username = #{username} and type = #{type}
@@ -38,7 +41,7 @@
     </select>
 <select id="getModelByStudyTxt" resultType="dao.controller.entity.Study">
         select *
-        from ziliao where studyname = #{studyname} and username = #{username} and type = #{type}
+        from ziliao where id = #{id}
     </select>
 
     <select id="getModelByStudyName" resultType="int">

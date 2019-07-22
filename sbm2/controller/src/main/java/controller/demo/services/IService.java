@@ -7,9 +7,12 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import java.util.List;
 
 public interface IService {
+
+    Boolean updateModelByStudy( int id, String studytxt);
+
     List<Study> getModelByStudy(String userName, String tableName,int[] index,boolean f);
 
-    Study getModelByStudyTxt(String studyname, String type, String username);
+    Study getModelByStudyTxt(int id);
 
     Boolean addModelByStudy(Study stud);
 

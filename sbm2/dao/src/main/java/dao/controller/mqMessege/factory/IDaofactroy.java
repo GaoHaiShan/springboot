@@ -2,7 +2,9 @@ package dao.controller.mqMessege.factory;
 
 
 import dao.controller.dao.IDao;
+import dao.controller.dao.IUserDao;
 import dao.controller.entity.Study;
+import dao.controller.entity.User;
 import dao.controller.mqMessege.entity.Message;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,9 @@ public class IDaofactroy {
 
     @Resource
     private IDao iDao;
+
+    @Resource
+    IUserDao iUserDao;
 
     private Message message1;
 
@@ -32,6 +37,8 @@ public class IDaofactroy {
         String model1="deleteModelByStudyname";
         String model2 = "addType";
         String model3="addPhoto";
+        String model4 = "updateModelByStudy";
+        String model5 = "addUser";
         if (model0.equals(message1.getModelName())) {
             iDao.addModelByStudy((Study) message1.getParam().get("study"));
         }
@@ -63,6 +70,21 @@ public class IDaofactroy {
                 System.out.println("图片添加失败");
             }
         }
-
+        if (model4.equals(message1.getModelName())) {
+            param1=message1.getParam().get("id").toString();
+            param2 = message1.getParam().get("studytxt").toString();
+            try {
+                iDao.updateModelByStudy(Integer.valueOf(param1),param2);
+            }catch (Exception e){
+                System.out.println("修改失败");
+            }
+        }
+        if (model5.equals(message1.getModelName())) {
+            try {
+                iUserDao.addUser((User)message1.getParam().get("user"));
+            } catch (Exception e) {
+                System.out.println("添加用户失败");
+            }
+        }
     }
 }

@@ -13,12 +13,16 @@ import java.util.List;
  */
 @FeignClient(name = "spring-cloud-dao")
 public interface IDao {
+
+    @RequestMapping("/IDao/updateModelByStudy")
+    Boolean updateModelByStudy(@RequestParam(value = "id") int id,
+                               @RequestParam(value = "studytxt") String studytxt);
+
     @RequestMapping("/IDao/addModelByStudy")
     Boolean addModelByStudy(@RequestBody Study study);
 
     @RequestMapping("/IDao/getModelByStudyTxt")
-    Study getModelByStudyTxt(@RequestParam(value = "studyname") String studyname,
-                             @RequestParam(value = "type") String type, @RequestParam(value = "username") String username);
+    Study getModelByStudyTxt(@RequestParam(value = "id") int id);
 
     @RequestMapping("/IDao/getModelByStudy")
     List<Study> getModelByStudy(@RequestParam(value = "username") String username,

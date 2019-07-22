@@ -46,7 +46,7 @@
 <body>
 <div style="width: 100%;"><h1 style="text-align: center;">请输入学习笔记</h1></div>
 <div>
-    <form action="/main/tianjia/" id="from1" onsubmit=" return chenge()" >
+    <form action="/main/updateStudy" id="from1" onsubmit=" return chenge()" >
         <div style="float: left;width: 30%;">
             <input style="display: none;" type="text" name="username" th:value="${study.getUsername()}" />
         <input style="display: none" type="text" name="id" readonly="readonly" th:value="${study.getId()}"/>

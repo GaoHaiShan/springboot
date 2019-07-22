@@ -121,7 +121,7 @@
             <table style="margin: auto" >
                     <tr th:each="study:${studys}">
                         <td style="width:600px;">
-                            <a th:href="'/main/jilu/?studyname='+${study.getStudyname()}+'&amp;type='+${study.getType()}+'&amp;otherUserName='+${study.getUsername()}+'&amp;myUsername='+${myUsername}">
+                            <a th:href="'/main/jilu/?id='+${study.getId()}+'&amp;otherUserName='+${study.getUsername()}+'&amp;myUsername='+${myUsername}">
                                 <h2 style="float: left;width: 150px;margin-top:17px; " th:text="${study.getStudyname()}"> </h2></a>
                             <button th:if="${f!=true}" style="width: 130px" onmousemove="this.className='input_move'" onmouseout="this.className=''" th:onclick="'photo('+${study.getId()}+')'" >上传图片</button>
                             <button style="width: 130px" onmousemove="this.className='input_move'" onmouseout="this.className=''" th:onclick="'photoShow('+${study.getId()}+')'">查看图片</button>

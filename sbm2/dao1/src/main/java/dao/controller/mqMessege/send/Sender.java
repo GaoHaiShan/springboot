@@ -39,8 +39,8 @@ public class Sender {
             //关闭io
             objectOutputStream.close();
             bos.close();
+            rabbitTemplate.convertAndSend("SPRING_FANOUT1","",oos);
             rabbitTemplate.convertAndSend("SPRING_FANOUT","",oos);
-
         }catch (Exception e){
             System.out.println("序列化出错");
         }

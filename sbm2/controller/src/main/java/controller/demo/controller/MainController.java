@@ -91,7 +91,23 @@ public class MainController {
         }
     }
 
-
+    /**
+     *
+     *修改已有知识点
+     */
+    @RequestMapping(value = "/updateStudy")
+    public String updateStudy(Study study) {
+        try {
+            if (service.updateModelByStudy(study.getId(),study.getStudytxt())) {
+                return "redirect:/main/startView/?myUsername="+ URLEncoder.encode(study.getUsername(),"UTF-8");
+            } else {
+                return "redirect:/main/jilu1/?myUsername"+URLEncoder.encode(study.getUsername(),"UTF-8");
+            }
+        } catch (Exception e) {
+            System.out.println("添加出错了");
+            return "jilu1";
+        }
+    }
     /**
      *访问新的知识点添加页面
      */
@@ -110,8 +126,7 @@ public class MainController {
      *查看已有知识
      */
     @RequestMapping("/jilu/")//访问旧知识点
-    public String selectJiLu(@RequestParam("studyname") String studyname,
-                             @RequestParam("type") String type1,
+    public String selectJiLu(@RequestParam("id") int id,
                              @RequestParam(value = "myUsername") String myUsername,
                              @RequestParam(value = "otherUserName",required = true,defaultValue = "") String otherUserName,
                              Model model) throws IOException {
@@ -127,8 +142,8 @@ public class MainController {
                 model.addAttribute("myUsername",myUsername);
                 f = true;
             }
-            Study study = service.getModelByStudyTxt(studyname,type1,otherUserName);
-            id = study.getId();
+            Study study = service.getModelByStudyTxt(id);
+            model.addAttribute("older","1");
             model.addAttribute("study",study);
             model.addAttribute("f",f);
             return "jilu";
@@ -184,7 +199,7 @@ public class MainController {
                               @RequestParam(value = "myUsername")String myUsername,
                               @RequestParam(value = "otherUsername",required = true,defaultValue = "")String otherUsername
                              , Model model) {
-        try {
+//        try {
             boolean f;
             int[] i = new int[2];
             i[0] = Integer.parseInt(index);
@@ -209,9 +224,9 @@ public class MainController {
             model.addAttribute("f", f);
             return "main";
 
-        }catch (Exception e){System.out.println("出错了");
-            return "main";
-        }
+//        }catch (Exception e){System.out.println("出错了");
+//            return "main";
+//        }
     }
 
     /**

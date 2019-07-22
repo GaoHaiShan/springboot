@@ -7,7 +7,6 @@ import java.util.Map;
 
 @Component
 public class Message  implements Serializable {
-    private static final long serialVersionUID=1L;
     private String ip;
     private String modelName;
     private Map<String,Object> param;

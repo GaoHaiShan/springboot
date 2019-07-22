@@ -26,7 +26,7 @@ public class IDaoImpl {
     private Message message;
 
     @RequestMapping("/addModelByStudy")
-    public Boolean addModelByStudy(@RequestBody Study study) throws UnknownHostException {
+    public Boolean addModelByStudy(@RequestBody Study study) {
         try {
             Map<String, Object> map = new HashMap<>(16);
             map.put("study", study);
@@ -36,11 +36,21 @@ public class IDaoImpl {
         }
         return dao.addModelByStudy(study);
     }
-
+    @RequestMapping("/updateModelByStudy")
+    public Boolean updateModelByStudy(@RequestParam("id") int id, @RequestParam("studytxt") String studytxt) {
+        try {
+            Map<String, Object> map = new HashMap<>(16);
+            map.put("id", id);
+            map.put("studytxt",studytxt);
+            sender.send(getMessage("updateModelByStudy", map, message));
+        }catch (Exception e){
+            System.out.println("消息发送失败");
+        }
+        return dao.updateModelByStudy(id,studytxt);
+    }
     @RequestMapping("/getModelByStudyTxt")
-    public Study getModelByStudyTxt(@RequestParam("studyname") String studyname,
-                                    @RequestParam("type") String type,@RequestParam("username") String username){
-        return dao.getModelByStudyTxt(studyname,type,username);
+    public Study getModelByStudyTxt(@RequestParam("id") int id){
+        return dao.getModelByStudyTxt(id);
     }
 
     @RequestMapping("/getModelByStudy")

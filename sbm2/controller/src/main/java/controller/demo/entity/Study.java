@@ -1,7 +1,6 @@
 package controller.demo.entity;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 
@@ -67,12 +66,12 @@ public class Study implements Serializable {
         this.permissions = permissions;
     }
 
-    public int isPermissions() {
+    public int getPermissions() {
         return permissions;
     }
 
     @Override
     public String toString() {
-        return "["+getId()+","+getStudyname()+","+getType()+","+getPhoto()+","+isPermissions()+"]";
+        return "["+getId()+","+getStudyname()+","+getType()+","+getPhoto()+"]";
     }
 }

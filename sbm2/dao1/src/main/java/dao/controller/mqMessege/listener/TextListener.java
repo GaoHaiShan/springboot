@@ -19,7 +19,6 @@ public class TextListener {
 
     @Autowired
     IDaofactroy iDaofactroy;
-    @RabbitHandler
     @RabbitListener(queues = {RabbitMQConfig.QUEUE_A})
     public void queueCListener(byte[] bytes){
         String addr = null;
